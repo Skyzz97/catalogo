@@ -105,3 +105,4 @@ Período de Plantio: 130-135 dias
 Empresa: Sygenta
 Imagem Principal: images/pimentao-peppone-icon.png
 Outras Imagens: images/pimentao-peppone/1.jpg, images/pimentao-peppone/2.jpg, images/pimentao-peppone/3.jpg
+
