@@ -154,56 +154,89 @@ function toggleFiltroFavoritos() {
 // Função para verificar e sincronizar dados com o servidor
 async function sincronizarDados() {
     try {
-        // Mostra um pequeno indicador de sincronização apenas na primeira vez
+        // Sempre mostra um indicador de status de conexão no primeiro carregamento
+        // mesmo que tenha sido verificado anteriormente na sessão
         const jaVerificado = sessionStorage.getItem('sincronizacaoVerificada');
         
-        if (!jaVerificado) {
-            const statusElement = document.createElement('div');
-            statusElement.style.position = 'fixed';
-            statusElement.style.bottom = '10px';
-            statusElement.style.right = '10px';
-            statusElement.style.padding = '8px 15px';
-            statusElement.style.backgroundColor = 'rgba(0,0,0,0.7)';
-            statusElement.style.color = '#fff';
-            statusElement.style.borderRadius = '5px';
-            statusElement.style.fontSize = '14px';
-            statusElement.style.zIndex = '9999';
-            statusElement.innerHTML = 'Verificando atualizações...';
-            document.body.appendChild(statusElement);
+        // Cria o elemento de status, agora sempre exibido no primeiro carregamento da página
+        const statusElement = document.createElement('div');
+        statusElement.style.position = 'fixed';
+        statusElement.style.bottom = '10px';
+        statusElement.style.right = '10px';
+        statusElement.style.padding = '8px 15px';
+        statusElement.style.backgroundColor = 'rgba(0,0,0,0.7)';
+        statusElement.style.color = '#fff';
+        statusElement.style.borderRadius = '5px';
+        statusElement.style.fontSize = '14px';
+        statusElement.style.zIndex = '9999';
+        statusElement.innerHTML = 'Verificando conectividade...';
+        document.body.appendChild(statusElement);
 
-            // Faz a requisição para o arquivo de sincronização
-            const response = await fetch('sincronizar_culturas.php');
-            const resultado = await response.json();
+        // Faz a requisição para o arquivo de sincronização
+        const response = await fetch('sincronizar_culturas.php');
+        const resultado = await response.json();
 
-            // Atualiza o indicador com o resultado
-            if (resultado.status === 'atualizado') {
-                statusElement.innerHTML = 'Catálogo atualizado!';
-                statusElement.style.backgroundColor = '#28a745';
-            } else if (resultado.status === 'atual') {
-                statusElement.innerHTML = 'Catálogo já está atualizado';
-                statusElement.style.backgroundColor = '#17a2b8';
-            } else {
-                statusElement.innerHTML = resultado.mensagem;
-                statusElement.style.backgroundColor = '#ffc107';
-            }
-
-            // Marca que já verificamos a sincronização nesta sessão
-            sessionStorage.setItem('sincronizacaoVerificada', 'true');
-
-            // Remove o indicador após alguns segundos
-            setTimeout(() => {
-                statusElement.style.opacity = '0';
-                statusElement.style.transition = 'opacity 0.5s';
-                setTimeout(() => {
-                    document.body.removeChild(statusElement);
-                }, 500);
-            }, 3000);
+        // Atualiza o indicador com o resultado
+        if (resultado.status === 'atualizado') {
+            statusElement.innerHTML = '<i class="bi bi-check-circle-fill"></i> Conectado ao servidor. Catálogo atualizado!';
+            statusElement.style.backgroundColor = '#28a745';
+        } else if (resultado.status === 'atual') {
+            statusElement.innerHTML = '<i class="bi bi-check-circle-fill"></i> Conectado ao servidor. Catálogo já está atualizado.';
+            statusElement.style.backgroundColor = '#17a2b8';
+        } else if (resultado.status === 'offline') {
+            statusElement.innerHTML = '<i class="bi bi-wifi-off"></i> ' + resultado.mensagem;
+            statusElement.style.backgroundColor = '#ffc107';
+        } else if (resultado.status === 'erro') {
+            statusElement.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i> ' + resultado.mensagem;
+            statusElement.style.backgroundColor = '#dc3545';
+        } else {
+            statusElement.innerHTML = resultado.mensagem;
+            statusElement.style.backgroundColor = '#ffc107';
         }
+
+        // Marca que já verificamos a sincronização nesta sessão
+        if (!jaVerificado) {
+            sessionStorage.setItem('sincronizacaoVerificada', 'true');
+        }
+
+        // Remove o indicador após alguns segundos
+        const tempoExibicao = jaVerificado ? 2000 : 4000; // Exibe por menos tempo nas verificações subsequentes
+        setTimeout(() => {
+            statusElement.style.opacity = '0';
+            statusElement.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                document.body.removeChild(statusElement);
+            }, 500);
+        }, tempoExibicao);
 
         // Retornamos true para indicar que a sincronização terminou
         return true;
     } catch (error) {
         console.error('Erro ao sincronizar dados:', error);
+        
+        // Mostra um erro de conexão
+        const statusElement = document.createElement('div');
+        statusElement.style.position = 'fixed';
+        statusElement.style.bottom = '10px';
+        statusElement.style.right = '10px';
+        statusElement.style.padding = '8px 15px';
+        statusElement.style.backgroundColor = '#dc3545';
+        statusElement.style.color = '#fff';
+        statusElement.style.borderRadius = '5px';
+        statusElement.style.fontSize = '14px';
+        statusElement.style.zIndex = '9999';
+        statusElement.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i> Erro ao verificar conectividade';
+        document.body.appendChild(statusElement);
+        
+        // Remove o indicador após alguns segundos
+        setTimeout(() => {
+            statusElement.style.opacity = '0';
+            statusElement.style.transition = 'opacity 0.5s';
+            setTimeout(() => {
+                document.body.removeChild(statusElement);
+            }, 500);
+        }, 3000);
+        
         return false;
     }
 }

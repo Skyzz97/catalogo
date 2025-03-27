@@ -1,13 +1,12 @@
 <?php
 header('Content-Type: application/json');
 
-// No ambiente de desenvolvimento, usamos o arquivo local em attached_assets
-// No ambiente real, isso seria substituído pelo URL do servidor real
-$arquivo_referencia = 'attached_assets/culturas.txt';
+// URL do servidor remoto para verificar
+$servidor_url = 'http://35.222.74.101/culturas.txt';
 $arquivo_local = 'culturas.txt';
 
-// Em ambiente de desenvolvimento, sempre retornamos sucesso
-$resposta = array('status' => 'atual', 'mensagem' => 'Usando dados locais (ambiente de desenvolvimento).');
+// Inicializa a resposta
+$resposta = array('status' => '', 'mensagem' => '');
 
 // Função para verificar conexão com internet testando múltiplos servidores
 function verificar_conexao() {
@@ -28,18 +27,46 @@ function verificar_conexao() {
     return false;
 }
 
-// No ambiente de desenvolvimento, verificamos se o arquivo local existe
-// Se não existir, criamos uma cópia do arquivo de referência
-if (!file_exists($arquivo_local) && file_exists($arquivo_referencia)) {
-    // Copia o arquivo de referência para o local se não existir
-    copy($arquivo_referencia, $arquivo_local);
-    $resposta['status'] = 'atualizado';
-    $resposta['mensagem'] = 'Arquivo local criado com sucesso.';
-} 
-
-// Em produção, verificaríamos a conexão com a internet
-// e sincronizaríamos com o servidor remoto
-// Mas no ambiente de desenvolvimento, isso não é necessário
+// Verifica se há conexão com a internet
+if (verificar_conexao()) {
+    try {
+        // Configurar um timeout curto para não travar a aplicação
+        $ctx = stream_context_create(array(
+            'http' => array(
+                'timeout' => 5
+            )
+        ));
+        
+        // Tenta buscar os dados do servidor
+        $dados_remotos = @file_get_contents($servidor_url, false, $ctx);
+        
+        if ($dados_remotos === false) {
+            // Não conseguiu acessar o servidor, mas está online
+            $resposta['status'] = 'offline';
+            $resposta['mensagem'] = 'Servidor indisponível, usando dados locais.';
+        } else {
+            // Verifica se o conteúdo é diferente do arquivo local
+            $dados_locais = file_exists($arquivo_local) ? file_get_contents($arquivo_local) : '';
+            
+            if ($dados_remotos != $dados_locais) {
+                // Atualiza o arquivo local
+                file_put_contents($arquivo_local, $dados_remotos);
+                $resposta['status'] = 'atualizado';
+                $resposta['mensagem'] = 'Dados atualizados com sucesso.';
+            } else {
+                $resposta['status'] = 'atual';
+                $resposta['mensagem'] = 'Dados já estão atualizados.';
+            }
+        }
+    } catch (Exception $e) {
+        $resposta['status'] = 'erro';
+        $resposta['mensagem'] = 'Erro ao sincronizar: ' . $e->getMessage();
+    }
+} else {
+    // Não há conexão com a internet
+    $resposta['status'] = 'offline';
+    $resposta['mensagem'] = 'Sem conexão com a internet, usando dados locais.';
+}
 
 echo json_encode($resposta);
 ?>

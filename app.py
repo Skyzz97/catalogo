@@ -94,19 +94,54 @@ def produtos():
 def sincronizar_culturas():
     # Simulação da função de sincronizar_culturas.php
     arquivo_local = 'culturas.txt'
-    arquivo_referencia = 'attached_assets/culturas.txt'
+    servidor_url = 'http://35.222.74.101/culturas.txt'
     
-    resposta = {'status': 'atual', 'mensagem': 'Usando dados locais (ambiente de desenvolvimento).'}
+    resposta = {'status': '', 'mensagem': ''}
     
-    # No ambiente de desenvolvimento, verificamos se o arquivo local existe
-    # Se não existir, criamos uma cópia do arquivo de referência
-    if not os.path.exists(arquivo_local) and os.path.exists(arquivo_referencia):
-        # Copia o arquivo de referência para o local se não existir
-        with open(arquivo_referencia, 'r') as f_ref:
-            with open(arquivo_local, 'w') as f_local:
-                f_local.write(f_ref.read())
-        resposta['status'] = 'atualizado'
-        resposta['mensagem'] = 'Arquivo local criado com sucesso.'
+    try:
+        # Tentar buscar os dados do servidor remoto
+        import requests
+        from urllib.request import urlopen
+        
+        try:
+            # Primeiro tenta com requests se estiver disponível
+            r = requests.get(servidor_url, timeout=5)
+            dados_remotos = r.text
+            success = r.status_code == 200
+        except:
+            # Caso contrário, usa urllib
+            try:
+                with urlopen(servidor_url, timeout=5) as response:
+                    dados_remotos = response.read().decode('utf-8')
+                    success = True
+            except:
+                success = False
+                dados_remotos = None
+        
+        if not success:
+            # Não conseguiu acessar o servidor
+            resposta['status'] = 'offline'
+            resposta['mensagem'] = 'Servidor indisponível, usando dados locais.'
+        else:
+            # Verifica se o conteúdo é diferente do arquivo local
+            dados_locais = ''
+            if os.path.exists(arquivo_local):
+                with open(arquivo_local, 'r') as f:
+                    dados_locais = f.read()
+            
+            if dados_remotos != dados_locais:
+                # Atualiza o arquivo local
+                with open(arquivo_local, 'w') as f:
+                    f.write(str(dados_remotos))
+                resposta['status'] = 'atualizado'
+                resposta['mensagem'] = 'Dados atualizados com sucesso.'
+            else:
+                resposta['status'] = 'atual'
+                resposta['mensagem'] = 'Dados já estão atualizados.'
+    
+    except Exception as e:
+        resposta['status'] = 'erro'
+        resposta['mensagem'] = f'Erro ao sincronizar: {str(e)}'
     
     return jsonify(resposta)
 
