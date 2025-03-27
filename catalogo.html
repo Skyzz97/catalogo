@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Produtos Agrícolas</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="catalogo.html">
+                <i class="bi bi-shop"></i> Catálogo Comercial
+            </a>
+            <div>
+                <button id="filterFavorites" class="btn btn-filter-favorites">
+                    <i class="bi bi-star"></i> Favoritos
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Menu Lateral -->
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="fecharMenu()">&times;</a>
+        <a href="catalogo.html"><i class="bi bi-house"></i> Página Inicial</a>
+        <a href="clientes.html"><i class="bi bi-people"></i> Clientes</a>
+        <a href="#" onclick="filtrarFavoritos()"><i class="bi bi-star"></i> Favoritos</a>
+        <a href="sobre.html"><i class="bi bi-info-circle"></i> Sobre</a>
+        
+        <!-- Filtros de Categoria -->
+        <div class="sidebar-section">
+            <h5>Categorias</h5>
+            <a href="#" onclick="filtrarCategoria('sementes')"><i class="bi bi-grid"></i> Sementes</a>
+            <a href="#" onclick="filtrarCategoria('adubos')"><i class="bi bi-basket"></i> Adubos</a>
+            <a href="#" onclick="filtrarCategoria('foliares')"><i class="bi bi-droplet"></i> Foliares</a>
+        </div>
+        
+        <!-- Filtros de Cultura -->
+        <div class="sidebar-section">
+            <h5>Culturas</h5>
+            <a href="#" onclick="filtrarCultura('Tomate')"><i class="bi bi-circle"></i> Tomate</a>
+            <a href="#" onclick="filtrarCultura('Pimentão')"><i class="bi bi-circle"></i> Pimentão</a>
+        </div>
+    </div>
+
+    <!-- Botão para abrir o menu lateral -->
+    <div class="menu-icon" onclick="abrirMenu()">
+        <i class="bi bi-list"></i>
+    </div>
+
+    <!-- Barra de Pesquisa -->
+    <div class="search-container">
+        <div class="input-group">
+            <input type="text" id="searchInput" class="form-control" placeholder="Buscar produto...">
+            <button class="btn btn-primary" id="searchButton">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+        
+        <!-- Filtros visíveis -->
+        <div class="filters-container mt-3">
+            <div class="filter-tags" id="filterTags">
+                <!-- Tags de filtro serão adicionadas aqui -->
+            </div>
+            <input type="hidden" id="categoriaFilter" value="">
+            <input type="hidden" id="culturaFilter" value="">
+        </div>
+    </div>
+
+    <!-- Grade de Produtos -->
+    <div class="produtos-grid" id="produtosGrid">
+        <!-- Os produtos serão carregados aqui -->
+        <div class="loading-indicator">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+            <p>Carregando produtos...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
