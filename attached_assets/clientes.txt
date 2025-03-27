@@ -1,0 +1,1 @@
+[{"nome":"Luiz Felipe da Silva Lovatti","cultivo":"asd","quantidade":"232","dataVisita":"2025-02-20","consideracoes":"12323","produtosSugeridos":"12313","localizacao":"https:\/\/www.google.com.br\/maps\/place\/-20.155115,+-40.938260\/@-20.1551239,-40.9382652,22z\/data=!4m4!3m3!8m2!3d-20.1551153!4d-40.9382602"}]

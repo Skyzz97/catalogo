@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        /* Estilos CSS */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0f0f0f;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff !important;
+            text-decoration: none !important;
+        }
+
+        .clientes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .cliente-card {
+            background-color: #222;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cliente-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .cliente-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .cliente-card .card-body {
+            padding: 1.5rem;
+        }
+
+        .cliente-card h5 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .cliente-card p {
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: #222;
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .modal-content .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .modal-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .modal-content .form-label {
+            color: #fff;
+        }
+
+        .modal-content .form-control {
+            background-color: #333;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            padding: 0.75rem 1rem;
+        }
+
+        .modal-content .form-control:focus {
+            background-color: #444;
+            box-shadow: none;
+            border-color: #e50914;
+        }
+
+        .modal-content .form-control::placeholder {
+            color: #aaa;
+        }
+
+        .modal-content .btn-primary {
+            background-color: #e50914;
+            border: none;
+            font-weight: bold;
+        }
+
+        .modal-content .btn-primary:hover {
+            background-color: #b20710;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="images/saas.png" alt="Logo"> Catálogo Comercial
+            </a>
+        </div>
+    </nav>
+
+    <!-- Lista de Clientes -->
+    <div class="clientes-grid" id="listaClientes">
+        <!-- Cards de clientes serão carregados aqui -->
+    </div>
+
+    <!-- Botão para adicionar cliente -->
+    <div class="text-center mb-4">
+        <button class="btn btn-primary" onclick="abrirFormularioCliente()">
+            <i class="bi bi-plus-lg"></i> Adicionar Cliente
+        </button>
+    </div>
+
+    <!-- Modal de Adicionar/Editar Cliente -->
+    <div id="formularioCliente" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharFormularioCliente()">&times;</span>
+            <h2>Adicionar Cliente</h2>
+            <form id="clienteForm">
+                <div class="mb-3">
+                    <label class="form-label">Nome</label>
+                    <input type="text" id="nome" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Cultivo Atual</label>
+                    <input type="text" id="cultivo" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Quantidade</label>
+                    <input type="number" id="quantidade" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Data da Última Visita</label>
+                    <input type="date" id="dataVisita" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Considerações</label>
+                    <textarea id="consideracoes" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Produtos Sugeridos</label>
+                    <textarea id="produtosSugeridos" class="form-control" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Função para carregar clientes do arquivo
+        async function carregarClientes() {
+            try {
+                const response = await fetch('clientes.txt');
+                const data = await response.text();
+                const clientes = data ? JSON.parse(data) : [];
+                exibirClientes(clientes);
+            } catch (error) {
+                console.error("Erro ao carregar clientes:", error);
+            // Se houver erro, inicializa o arquivo com um array vazio
+                await salvarClientesNoArquivo([]);
+            }
+        }
+
+        // Função para exibir clientes na página
+        function exibirClientes(clientes) {
+            const listaClientes = document.getElementById("listaClientes");
+            listaClientes.innerHTML = clientes.map((cliente, index) => `
+                <div class="cliente-card" onclick="abrirDetalhesCliente(${index})">
+                    <div class="card-body">
+                        <h5>${cliente.nome}</h5>
+                        <p>Cultivo Atual: ${cliente.cultivo}</p>
+                        <p>Quantidade: ${cliente.quantidade}</p>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        // Função para abrir a página de detalhes do cliente
+        function abrirDetalhesCliente(index) {
+            // Redireciona para a página de detalhes do cliente com o ID (índice) na URL
+            window.location.href = `cliente.html?id=${index}`;
+        }
+
+        // Função para abrir o formulário de cliente
+        function abrirFormularioCliente() {
+            document.getElementById("formularioCliente").style.display = "block";
+        }
+
+        // Função para fechar o formulário de cliente
+        function fecharFormularioCliente() {
+            document.getElementById("formularioCliente").style.display = "none";
+        }
+
+        // Função para salvar cliente
+        async function salvarCliente(event) {
+            event.preventDefault();
+            const cliente = {
+                nome: document.getElementById("nome").value,
+                cultivo: document.getElementById("cultivo").value,
+                quantidade: document.getElementById("quantidade").value,
+                dataVisita: document.getElementById("dataVisita").value,
+                consideracoes: document.getElementById("consideracoes").value,
+                produtosSugeridos: document.getElementById("produtosSugeridos").value
+            };
+
+            try {
+                // Carrega os clientes existentes
+                const response = await fetch('clientes.txt');
+                const data = await response.text();
+                const clientes = data ? JSON.parse(data) : [];
+
+                // Adiciona o novo cliente ao array
+                clientes.push(cliente);
+
+                // Salva a lista atualizada no arquivo
+                await fetch('clientes.txt', {
+                    method: 'POST',
+                    body: JSON.stringify(clientes),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                // Fecha o modal e recarrega a lista de clientes
+                fecharFormularioCliente();
+                carregarClientes();
+            } catch (error) {
+                console.error("Erro ao salvar cliente:", error);
+            }
+        }
+
+        // Evento de submit do formulário
+        document.getElementById("clienteForm").addEventListener("submit", salvarCliente);
+
+        // Carregar clientes ao abrir a página
+        carregarClientes();
+    </script>
+</body>
+</html>

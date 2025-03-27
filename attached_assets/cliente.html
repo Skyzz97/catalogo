@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Cliente</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #0f0f0f;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff !important;
+            text-decoration: none !important;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .cliente-detalhes {
+            background-color: #222;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-top: 20px;
+        }
+
+        .cliente-detalhes h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cliente-detalhes p {
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+
+        .btn-group {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-group button {
+            flex: 1;
+        }
+
+        .modal-content {
+            background-color: #222;
+            color: #fff;
+            margin: 30px auto;
+            width: calc(100% - 60px);
+            max-width: 600px;
+            border-radius: 10px;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .modal-content .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .modal-content .form-control {
+            background-color: #333;
+            border: none;
+            color: #fff;
+        }
+
+        .modal-content .form-control:focus {
+            background-color: #444;
+            box-shadow: none;
+            border-color: #e50914;
+        }
+
+        /* Estilo do Menu Lateral */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            z-index: 1000;
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            color: #fff;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #333;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 2rem;
+            margin-left: 50px;
+        }
+
+        .menu-icon {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .navbar {
+            margin-left: 60px;
+        }
+
+        /* Estilo para ícones no menu */
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        /* Botão de voltar */
+        .btn-voltar {
+            margin-bottom: 20px;
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-voltar:hover {
+            color: #e50914;
+        }
+
+        /* Estilo do mapa */
+        #mapaLocalizacao {
+            width: 100%;
+            height: 300px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="images/saas.png" alt="Logo"> Catálogo Comercial
+            </a>
+            <div>
+                <button id="filterFavorites" class="btn btn-filter-favorites">
+                    <i class="bi bi-star"></i> Favoritos
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Menu Lateral -->
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="fecharMenu()">&times;</a>
+        <a href="catalogo.html"><i class="bi bi-house"></i> Página Inicial</a>
+        <a href="clientes.html"><i class="bi bi-people"></i> Clientes</a>
+        <a href="sobre.html"><i class="bi bi-info-circle"></i> Sobre</a>
+    </div>
+
+    <!-- Botão para abrir o menu lateral -->
+    <div class="menu-icon" onclick="abrirMenu()">
+        <i class="bi bi-list"></i>
+    </div>
+
+    <!-- Detalhes do Cliente -->
+    <div class="container">
+        <!-- Botão de voltar -->
+        <button class="btn-voltar" onclick="voltarParaClientes()">
+            <i class="bi bi-arrow-left"></i> Voltar para Clientes
+        </button>
+
+        <!-- Box do Cliente -->
+        <div class="cliente-detalhes" id="clienteDetalhes">
+            <!-- Detalhes do cliente serão carregados aqui -->
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-warning" onclick="abrirModalEdicao()">
+                <i class="bi bi-pencil"></i> Editar
+            </button>
+            <button class="btn btn-danger" onclick="excluirCliente()">
+                <i class="bi bi-trash"></i> Excluir
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Edição -->
+    <div id="modalEdicao" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModalEdicao()">&times;</span>
+            <h2>Editar Cliente</h2>
+            <form id="editarClienteForm">
+                <div class="mb-3">
+                    <label class="form-label">Nome</label>
+                    <input type="text" id="editarNome" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Cultivo Atual</label>
+                    <input type="text" id="editarCultivo" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Quantidade</label>
+                    <input type="number" id="editarQuantidade" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Data da Última Visita</label>
+                    <input type="date" id="editarDataVisita" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Considerações</label>
+                    <textarea id="editarConsideracoes" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Produtos Sugeridos</label>
+                    <textarea id="editarProdutosSugeridos" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Link do Google Maps</label>
+                    <input type="text" id="editarLocalizacao" class="form-control" placeholder="Cole o link do Google Maps aqui">
+                </div>
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        let clienteAtual = null;
+
+        // Função para carregar os detalhes do cliente
+        async function carregarDetalhesCliente() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            if (id === null) {
+                console.error("ID do cliente não encontrado na URL.");
+                return;
+            }
+
+            try {
+                const response = await fetch('clientes.php?acao=ler');
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.statusText}`);
+                }
+                const data = await response.json();
+                if (data[id]) {
+                    clienteAtual = { ...data[id], id }; // Armazena o cliente atual
+                    exibirDetalhesCliente(clienteAtual);
+                } else {
+                    console.error("Cliente não encontrado.");
+                }
+            } catch (error) {
+                console.error("Erro ao carregar detalhes do cliente:", error);
+            }
+        }
+
+        // Função para exibir os detalhes do cliente
+        function exibirDetalhesCliente(cliente) {
+            const clienteDetalhes = document.getElementById("clienteDetalhes");
+
+            clienteDetalhes.innerHTML = `
+                <h1>${cliente.nome}</h1>
+                <p><strong>Cultivo Atual:</strong> ${cliente.cultivo}</p>
+                <p><strong>Quantidade:</strong> ${cliente.quantidade}</p>
+                <p><strong>Data da Última Visita:</strong> ${cliente.dataVisita}</p>
+                <p><strong>Considerações:</strong> ${cliente.consideracoes}</p>
+                <p><strong>Produtos Sugeridos:</strong> ${cliente.produtosSugeridos}</p>
+                <div class="mb-3">
+                    <h3>Localização da Propriedade</h3>
+                    <div id="mapaLocalizacao" style="width: 100%; height: 300px; border-radius: 10px;"></div>
+                </div>
+            `;
+
+            // Inicializa o mapa
+            if (cliente.localizacao) {
+                const coordenadas = extrairCoordenadasDoLink(cliente.localizacao);
+                if (coordenadas) {
+                    initMap(coordenadas);
+                } else {
+                    document.getElementById('mapaLocalizacao').innerHTML = "<p>Link do Google Maps inválido.</p>";
+                }
+            }
+        }
+
+        // Função para extrair coordenadas de um link do Google Maps
+        function extrairCoordenadasDoLink(link) {
+            const regex = /@([-\d.]+),([-\d.]+)/;
+            const match = link.match(regex);
+
+            if (match) {
+                const lat = parseFloat(match[1]);
+                const lng = parseFloat(match[2]);
+                return [lat, lng];
+            } else {
+                console.error("Link do Google Maps inválido.");
+                return null;
+            }
+        }
+
+        // Função para inicializar o mapa com OpenStreetMap
+        function initMap(coordenadas) {
+            const map = L.map('mapaLocalizacao').setView(coordenadas, 15);
+
+            // Adiciona o tile layer do OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Adiciona um marcador
+            L.marker(coordenadas).addTo(map)
+                .bindPopup('Localização do Cliente')
+                .openPopup();
+        }
+
+        // Função para abrir o modal de edição
+        function abrirModalEdicao() {
+            if (!clienteAtual) return;
+
+            // Preenche o formulário de edição com os dados atuais
+            document.getElementById("editarNome").value = clienteAtual.nome;
+            document.getElementById("editarCultivo").value = clienteAtual.cultivo;
+            document.getElementById("editarQuantidade").value = clienteAtual.quantidade;
+            document.getElementById("editarDataVisita").value = clienteAtual.dataVisita;
+            document.getElementById("editarConsideracoes").value = clienteAtual.consideracoes;
+            document.getElementById("editarProdutosSugeridos").value = clienteAtual.produtosSugeridos;
+            document.getElementById("editarLocalizacao").value = clienteAtual.localizacao || "";
+
+            // Abre o modal
+            document.getElementById("modalEdicao").style.display = "block";
+        }
+
+        // Função para fechar o modal de edição
+        function fecharModalEdicao() {
+            document.getElementById("modalEdicao").style.display = "none";
+        }
+
+        // Função para salvar as alterações
+        async function salvarAlteracoes(event) {
+            event.preventDefault();
+
+            const clienteEditado = {
+                nome: document.getElementById("editarNome").value,
+                cultivo: document.getElementById("editarCultivo").value,
+                quantidade: document.getElementById("editarQuantidade").value,
+                dataVisita: document.getElementById("editarDataVisita").value,
+                consideracoes: document.getElementById("editarConsideracoes").value,
+                produtosSugeridos: document.getElementById("editarProdutosSugeridos").value,
+                localizacao: document.getElementById("editarLocalizacao").value
+            };
+
+            try {
+                const response = await fetch('clientes.php?acao=salvar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: clienteAtual.id, cliente: clienteEditado })
+                });
+
+                const resultado = await response.json();
+                if (resultado.status === 'sucesso') {
+                    // Fecha o modal e recarrega os detalhes do cliente
+                    fecharModalEdicao();
+                    carregarDetalhesCliente();
+                } else {
+                    console.error("Erro ao salvar alterações:", resultado.mensagem);
+                }
+            } catch (error) {
+                console.error("Erro ao salvar alterações:", error);
+            }
+        }
+
+        // Função para excluir o cliente
+        async function excluirCliente() {
+            if (!confirm("Tem certeza que deseja excluir este cliente?")) {
+                return;
+            }
+
+            try {
+                const response = await fetch('clientes.php?acao=excluir', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: clienteAtual.id })
+                });
+
+                const resultado = await response.json();
+                if (resultado.status === 'sucesso') {
+                    // Redireciona de volta para a lista de clientes
+                    window.location.href = 'clientes.html';
+                } else {
+                    console.error("Erro ao excluir cliente:", resultado.mensagem);
+                }
+            } catch (error) {
+                console.error("Erro ao excluir cliente:", error);
+            }
+        }
+
+        // Funções para abrir e fechar o menu lateral
+        function abrirMenu() {
+            document.getElementById("sidebar").style.left = "0";
+        }
+
+        function fecharMenu() {
+            document.getElementById("sidebar").style.left = "-250px";
+        }
+
+        // Função para voltar para a página de clientes
+        function voltarParaClientes() {
+            window.location.href = 'clientes.html';
+        }
+
+        // Evento de submit do formulário de edição
+        document.getElementById("editarClienteForm").addEventListener("submit", salvarAlteracoes);
+
+        // Carrega os detalhes do cliente ao abrir a página
+        carregarDetalhesCliente();
+    </script>
+</body>
+</html>
