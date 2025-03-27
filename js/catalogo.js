@@ -154,51 +154,57 @@ function toggleFiltroFavoritos() {
 // Função para verificar e sincronizar dados com o servidor
 async function sincronizarDados() {
     try {
-        // Mostra um pequeno indicador de sincronização
-        const statusElement = document.createElement('div');
-        statusElement.style.position = 'fixed';
-        statusElement.style.bottom = '10px';
-        statusElement.style.right = '10px';
-        statusElement.style.padding = '8px 15px';
-        statusElement.style.backgroundColor = 'rgba(0,0,0,0.7)';
-        statusElement.style.color = '#fff';
-        statusElement.style.borderRadius = '5px';
-        statusElement.style.fontSize = '14px';
-        statusElement.style.zIndex = '9999';
-        statusElement.innerHTML = 'Verificando atualizações...';
-        document.body.appendChild(statusElement);
+        // Mostra um pequeno indicador de sincronização apenas na primeira vez
+        const jaVerificado = sessionStorage.getItem('sincronizacaoVerificada');
+        
+        if (!jaVerificado) {
+            const statusElement = document.createElement('div');
+            statusElement.style.position = 'fixed';
+            statusElement.style.bottom = '10px';
+            statusElement.style.right = '10px';
+            statusElement.style.padding = '8px 15px';
+            statusElement.style.backgroundColor = 'rgba(0,0,0,0.7)';
+            statusElement.style.color = '#fff';
+            statusElement.style.borderRadius = '5px';
+            statusElement.style.fontSize = '14px';
+            statusElement.style.zIndex = '9999';
+            statusElement.innerHTML = 'Verificando atualizações...';
+            document.body.appendChild(statusElement);
 
-        // Faz a requisição para o arquivo de sincronização
-        const response = await fetch('sincronizar_culturas.php');
-        const resultado = await response.json();
+            // Faz a requisição para o arquivo de sincronização
+            const response = await fetch('sincronizar_culturas.php');
+            const resultado = await response.json();
 
-        // Atualiza o indicador com o resultado
-        if (resultado.status === 'atualizado') {
-            statusElement.innerHTML = 'Catálogo atualizado!';
-            statusElement.style.backgroundColor = '#28a745';
-            // Recarrega a página para mostrar os dados atualizados
+            // Atualiza o indicador com o resultado
+            if (resultado.status === 'atualizado') {
+                statusElement.innerHTML = 'Catálogo atualizado!';
+                statusElement.style.backgroundColor = '#28a745';
+            } else if (resultado.status === 'atual') {
+                statusElement.innerHTML = 'Catálogo já está atualizado';
+                statusElement.style.backgroundColor = '#17a2b8';
+            } else {
+                statusElement.innerHTML = resultado.mensagem;
+                statusElement.style.backgroundColor = '#ffc107';
+            }
+
+            // Marca que já verificamos a sincronização nesta sessão
+            sessionStorage.setItem('sincronizacaoVerificada', 'true');
+
+            // Remove o indicador após alguns segundos
             setTimeout(() => {
-                carregarProdutos();
-            }, 1000);
-        } else if (resultado.status === 'atual') {
-            statusElement.innerHTML = 'Catálogo já está atualizado';
-            statusElement.style.backgroundColor = '#17a2b8';
-        } else {
-            statusElement.innerHTML = resultado.mensagem;
-            statusElement.style.backgroundColor = '#ffc107';
+                statusElement.style.opacity = '0';
+                statusElement.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    document.body.removeChild(statusElement);
+                }, 500);
+            }, 3000);
         }
 
-        // Remove o indicador após alguns segundos
-        setTimeout(() => {
-            statusElement.style.opacity = '0';
-            statusElement.style.transition = 'opacity 0.5s';
-            setTimeout(() => {
-                document.body.removeChild(statusElement);
-            }, 500);
-        }, 3000);
-
+        // Retornamos true para indicar que a sincronização terminou
+        return true;
     } catch (error) {
         console.error('Erro ao sincronizar dados:', error);
+        return false;
     }
 }
 
