@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Comercial Agrícola</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-shop"></i> Catálogo Comercial Agrícola
+            </a>
+        </div>
+    </nav>
+
+    <!-- Menu Lateral -->
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="fecharMenu()">&times;</a>
+        <a href="catalogo.html"><i class="bi bi-house"></i> Página Inicial</a>
+        <a href="clientes.html"><i class="bi bi-people"></i> Clientes</a>
+        <a href="sobre.html"><i class="bi bi-info-circle"></i> Sobre</a>
+    </div>
+
+    <!-- Botão para abrir o menu lateral -->
+    <div class="menu-icon" onclick="abrirMenu()">
+        <i class="bi bi-list"></i>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="container welcome-container">
+        <div class="welcome-content text-center">
+            <h1>Bem-vindo ao Catálogo Comercial Agrícola</h1>
+            <p class="lead">A ferramenta completa para representantes comerciais de produtos agrícolas</p>
+            
+            <div class="feature-buttons mt-5">
+                <a href="catalogo.html" class="btn btn-primary btn-lg">
+                    <i class="bi bi-box-seam"></i> Acessar Catálogo de Produtos
+                </a>
+                <a href="clientes.html" class="btn btn-success btn-lg mt-3 mt-md-0 ms-md-3">
+                    <i class="bi bi-people"></i> Gerenciar Clientes
+                </a>
+            </div>
+            
+            <div class="app-features mt-5">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="bi bi-search"></i>
+                            <h3>Pesquisa e Filtros</h3>
+                            <p>Encontre rapidamente o produto ou cliente que procura com poderosas ferramentas de busca.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="bi bi-star"></i>
+                            <h3>Favoritos</h3>
+                            <p>Marque seus produtos favoritos para acessá-los rapidamente em visitas futuras.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="feature-card">
+                            <i class="bi bi-geo-alt"></i>
+                            <h3>Localização</h3>
+                            <p>Registre e visualize a localização dos seus clientes para planejar visitas eficientes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

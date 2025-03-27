@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Produtos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-shop"></i> Catálogo Comercial Agrícola
+            </a>
+            <div>
+                <button id="btnFavoritos" class="btn btn-filter-favorites">
+                    <i class="bi bi-star"></i> Favoritos
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Menu Lateral -->
+    <div id="sidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="fecharMenu()">&times;</a>
+        <a href="catalogo.html"><i class="bi bi-house"></i> Página Inicial</a>
+        <a href="clientes.html"><i class="bi bi-people"></i> Clientes</a>
+        <a href="sobre.html"><i class="bi bi-info-circle"></i> Sobre</a>
+        <div class="sidebar-section">
+            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">Categorias</h6>
+            <a href="javascript:void(0)" onclick="filtrarCategoria('sementes')"><i class="bi bi-flower1"></i> Sementes</a>
+            <a href="javascript:void(0)" onclick="filtrarCategoria('adubos')"><i class="bi bi-droplet-fill"></i> Adubos</a>
+            <a href="javascript:void(0)" onclick="filtrarCategoria('foliares')"><i class="bi bi-spray"></i> Foliares</a>
+        </div>
+        <div class="sidebar-section">
+            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">Culturas</h6>
+            <a href="javascript:void(0)" onclick="filtrarCultura('Tomate')"><i class="bi bi-circle"></i> Tomate</a>
+            <a href="javascript:void(0)" onclick="filtrarCultura('Pimentão')"><i class="bi bi-circle"></i> Pimentão</a>
+        </div>
+    </div>
+
+    <!-- Botão para abrir o menu lateral -->
+    <div class="menu-icon" onclick="abrirMenu()">
+        <i class="bi bi-list"></i>
+    </div>
+
+    <!-- Seção de Filtros -->
+    <div class="container mt-4">
+        <div class="filtros-container">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <input type="text" id="pesquisaProduto" class="form-control" placeholder="Pesquisar produtos...">
+                </div>
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <select id="categoriaFilter" class="form-select">
+                        <option value="">Todas as Categorias</option>
+                        <option value="sementes">Sementes</option>
+                        <option value="adubos">Adubos</option>
+                        <option value="foliares">Foliares</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="culturaFilter" class="form-select">
+                        <option value="">Todas as Culturas</option>
+                        <option value="Tomate">Tomate</option>
+                        <option value="Pimentão">Pimentão</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Catálogo de Produtos -->
+    <div class="produtos-grid" id="listaProdutos">
+        <!-- Produtos serão carregados dinamicamente aqui -->
+        <div class="text-center w-100 p-5">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+            <p class="mt-3">Carregando produtos...</p>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/catalogo.js"></script>
+</body>
+</html>

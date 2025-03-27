@@ -1,0 +1,107 @@
+Versão: 1.0.1
+Cultura: Tomate
+Variedade: Astuto
+Características: Maior pacote de resistências. Planta vigorosa de excelente tolerância a doenças para cultivo em condições tropicais, fruto firme.
+Resistências: TYLCV (vírus da folha amarela), Vira-cabeça, Vírus do Mosaico, Fusarium 1,2,3.
+Período de Plantio: 80-90 Dias.
+Empresa: Feltrin Sementes
+Imagem Principal: images/tomate-astuto-icon.jpg
+Outras Imagens: images/tomate-astuto/1.jpg, images/tomate-astuto/2.jpg, images/tomate-astuto/3.jpg, images/tomate-astuto/4.jpg
+
+
+Variedade: Serato
+Características: Planta de crescimento rápido, com pencas definidas. Indicado para o plantio em campo aberto e cultivo protegido.
+Resistências: Resistência a nematoide, vira-cabeça, mosaico.
+Período de Plantio: 110 dias.
+Empresa: TopSeed
+Imagem Principal: images/tomate-serato-icon.jpg
+Outras Imagens: images/tomate-serato/1.jpeg, images/tomate-serato/2.jpeg, images/tomate-serato/3.jpeg, images/tomate-serato/4.jpeg, images/tomate-serato/5.jpeg, images/tomate-serato/6.jpeg, images/tomate-serato/7.jpeg, images/tomate-serato/8.jpeg, images/tomate-serato/9.jpeg, images/tomate-serato/10.jpeg
+
+
+Variedade: Benedetti
+Características: Tomate Italiano de altíssima produtividade.
+Resistências: vira-cabeça, mosaico, verticillium
+Período de Plantio: 100 dias em média
+Empresa: Enza Zaden
+Imagem Principal: images/tomate-benedetti-icon.png
+Outras Imagens: images/tomate-benedetti/1.jpg, images/tomate-benedetti/2.jpg, images/tomate-benedetti/3.jpg, images/tomate-benedetti/4.jpg
+
+
+Variedade: Guara
+Características: Variedade robusta e resistente a transporte.
+Resistências: Verticillium, Fusarium, Nematoide, TYLCV (vírus da folha amarela)
+Período de Plantio: 100 dias em média
+Empresa: Clause
+Imagem Principal: images/tomate-guara-icon.jpg
+Outras Imagens: images/tomate-guara/1.jpg
+
+
+Variedade: Icaro
+Características: Tomate de cor vibrante e sabor marcante, com o melhor desenvolvimento do mercado.
+Resistências: TYLCV (vírus da folha amarela), Vira-cabeça, Mosaico, Verticillium, Fusarium.
+Período de Plantio: 90 dias
+Empresa: Feltrin
+Imagem Principal: images/tomate-icaro-icon.jpg
+Outras Imagens: images/tomate-icaro/1.jpg, images/tomate-icaro/2.jpg, images/tomate-icaro/3.jpg, images/tomate-icaro/4.jpg, images/tomate-icaro/5.jpg
+
+
+Variedade: Moria
+Características: Ideal para cultivo padrão em estufa
+Resistências: Inexistente
+Período de Plantio: 90 dias
+Empresa: .
+Imagem Principal: images/tomate-moria-icon.jpeg
+Outras Imagens: images/tomate-moria/1.jpg, images/tomate-moria/2.jpg
+
+
+Variedade: Nivus
+Características: Tomate com excelente pós-colheita e sabor suave.
+Resistências: TYLCV (vírus da folha amarela), Vira-cabeça, Mosaico, Verticillium, Fusarium.
+Período de Plantio: 110 dias
+Empresa: TOP Seed
+Imagem Principal: images/tomate-nivus-icon.jpeg
+Outras Imagens: images/tomate-nivus/1.jpeg, images/tomate-nivus/2.jpeg
+
+
+Variedade: Tronus
+Características: Variedade de alta produtividade e tamanho uniforme.
+Resistências: Mosaico, Fusarium, Verticillium.
+Período de Plantio: 110 dias
+Empresa: Rijk Zwan
+Imagem Principal: images/tomate-tronus-icon.jpeg
+Outras Imagens: images/tomate-tronus/1.jpeg, images/tomate-tronus/2.jpeg, images/tomate-tronus/3.jpeg, images/tomate-tronus/4.jpeg
+
+Cultura: Pimentão
+Variedade: Larry
+Características: Pimentão retangular vermelho lançamento da Enza Zaden para o mercado de estufas.
+Resistências: Tolera: Mosaico, Vira-cabeça, Nematoide
+Período de Plantio: 90 a 120 dias
+Empresa: Enza Zaden
+Imagem Principal: images/pimentao-larry-icon.jpg
+Outras Imagens: images/pimentao-larry/1.jpg, images/pimentao-larry/2.jpg, images/pimentao-larry/3.jpg, images/pimentao-larry/4.jpg
+
+
+Variedade: Wallace
+Características: Coloração verde escuro brilhante; Ombro largo de parede espessa
+Resistências: Tolera Mosaico
+Período de Plantio: 90 dias
+Empresa: Feltrin Sementes
+Imagem Principal: images/pimentao-wallace-icon.jpg
+Outras Imagens: images/pimentao-wallace/1.jpg, images/pimentao-wallace/2.jpg, images/pimentao-wallace/3.jpg
+
+Variedade: Marli R
+Características: Coloração intensa, frutos pesados, elevado pós-colheita e formato ideal para o mercado. Produtor colhe mais por mais tempo.
+Resistências: Tolera Vírus da batata, Mosaico, Podridão
+Período de Plantio: 90 a 110 dias
+Empresa: Sakata
+Imagem Principal: images/pimentao-marlir-icon.png
+Outras Imagens: images/pimentao-marlir/1.jpg, images/pimentao-marlir/2.jpg, images/pimentao-marlir/3.jpg
+
+
+Variedade: Peppone
+Características: Planta compacta com internódio curto. Retangular mediano com 3 a 4 lóculos; verde/amarelo e brilhante; Parede lisa com excelente espessura (8-9mm).
+Resistências: Resistência ao Vírus Vira-Cabeça (TSWV), Vírus do mosaico CMV e ao Oídio.
+Período de Plantio: 130-135 dias
+Empresa: Sygenta
+Imagem Principal: images/pimentao-peppone-icon.png
+Outras Imagens: images/pimentao-peppone/1.jpg, images/pimentao-peppone/2.jpg, images/pimentao-peppone/3.jpg
